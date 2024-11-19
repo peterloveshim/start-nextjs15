@@ -1,4 +1,5 @@
 import { Footer } from "./footer";
+import { TopMenu } from "./top-menu";
 
 type Props = {
   children: React.ReactNode;
@@ -6,11 +7,16 @@ type Props = {
 
 export function SimpleLayout({ children }: Props) {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        {children}
-      </main>
+    <>
+      <div className="grid grid-rows-[1fr] md:grid-rows-[40px_1fr] items-center justify-items-center min-h-screen gap-4 font-[family-name:var(--font-geist-sans)]">
+        <div className="row-start-1 hidden md:flex items-center justify-between w-full px-3 max-w-[1400px]">
+          <TopMenu />
+        </div>
+        <main className="flex flex-col gap-8 md:row-start-2 justify-center items-center w-full h-full">
+          {children}
+        </main>
+      </div>
       <Footer />
-    </div>
+    </>
   );
 }
