@@ -1,16 +1,13 @@
 import { cookies } from "next/headers";
 
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
+
+import { SidebarProvider } from "@/components/ui/sidebar";
 import { Sheet } from "@/components/ui/sheet";
-import { RightMenu } from "./right-menu";
+
 import { TopMenu } from "./top-menu";
 
-export default async function MainLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export async function MainLayout({ children }: { children: React.ReactNode }) {
   const cookieStore = await cookies();
   const defaultOpen = cookieStore.get("sidebar:state")?.value === "true";
 

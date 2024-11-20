@@ -63,7 +63,7 @@ export function TopMenu() {
       <div className="min-w-40">
         <LogoSmall />
       </div>
-      <NavigationMenu>
+      <NavigationMenu className="hidden md:flex ">
         <NavigationMenuList>
           <NavigationMenuItem>
             <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>

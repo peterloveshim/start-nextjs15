@@ -1,9 +1,9 @@
-import { SimpleLayout } from "@/layouts/simple";
+import { MainLayout } from "@/layouts/main";
 
 type Props = {
   children: React.ReactNode;
 };
 
 export default function Layout({ children }: Props) {
-  return <SimpleLayout>{children}</SimpleLayout>;
+  return <MainLayout>{children}</MainLayout>;
 }

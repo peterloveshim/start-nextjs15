@@ -1,4 +1,15 @@
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react";
+"use client";
+
+import {
+  Calendar,
+  Home,
+  AppWindow,
+  User,
+  LogOut,
+  House,
+  Building,
+  ChevronRight,
+} from "lucide-react";
 
 import {
   Sidebar,
@@ -9,58 +20,119 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
+
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+
 import { SidebarCustomHeader } from "./app-sidebar-header";
 
+import { paths } from "@/static";
+
 // Menu items.
-const items = [
+const menu1 = [
   {
-    title: "Home",
-    url: "/",
-    icon: Home,
+    title: "대시보드",
+    url: "/dashboard",
+    icon: AppWindow,
   },
   {
-    title: "Inbox",
+    title: "방 관리",
     url: "#",
-    icon: Inbox,
+    icon: House,
   },
   {
-    title: "Calendar",
+    title: "사이트관리",
     url: "#",
+    icon: Building,
+  },
+  {
+    title: "계약관리",
     icon: Calendar,
+    items: [
+      {
+        title: "리스트",
+        url: "#",
+      },
+      {
+        title: "캘린더",
+        url: "#",
+      },
+    ],
   },
 ];
 
-const items2 = [
+const menu2 = [
   {
-    title: "Search",
-    url: "#",
-    icon: Search,
+    title: "Account",
+    url: paths.account,
+    icon: User,
   },
   {
-    title: "Settings",
+    title: "Logout",
     url: "#",
-    icon: Settings,
+    icon: LogOut,
   },
 ];
 
 export function AppSidebar() {
+  const { open } = useSidebar();
+
   return (
     <Sidebar side="left" variant="sidebar" collapsible="icon">
       <SidebarCustomHeader />
       <SidebarContent className="z-30">
         <SidebarGroup>
-          <SidebarGroupLabel>Menu Group 1</SidebarGroupLabel>
+          <SidebarGroupLabel className="uppercase">
+            Overview - Stay
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
+              {menu1.map((menu) => (
+                <SidebarMenuItem key={menu.title}>
+                  {menu.items && open ? (
+                    <Collapsible
+                      key={"test"}
+                      title={"test"}
+                      defaultOpen
+                      className="group/collapsible"
+                    >
+                      <SidebarMenuButton asChild>
+                        <CollapsibleTrigger className="uppercase text-sidebar-foreground/100">
+                          <menu.icon />
+                          <span className="text-sm">{menu.title}</span>
+                          <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
+                        </CollapsibleTrigger>
+                      </SidebarMenuButton>
+                      <CollapsibleContent className="pl-4">
+                        {menu.items.map((subMenu) => {
+                          return (
+                            <SidebarMenuButton key={subMenu.title} asChild>
+                              <a
+                                href={subMenu.url}
+                                className="rounded-none border-s-2 border-gray-200"
+                              >
+                                <div className="p-[6px]">
+                                  <span>{subMenu.title}</span>
+                                </div>
+                              </a>
+                            </SidebarMenuButton>
+                          );
+                        })}
+                      </CollapsibleContent>
+                    </Collapsible>
+                  ) : (
+                    <SidebarMenuButton asChild>
+                      <a href={menu.url}>
+                        <menu.icon />
+                        <span>{menu.title}</span>
+                      </a>
+                    </SidebarMenuButton>
+                  )}
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>
@@ -68,10 +140,10 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel>Menu Group 2</SidebarGroupLabel>
+          <SidebarGroupLabel className="uppercase">User</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items2.map((item) => (
+              {menu2.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <a href={item.url}>
