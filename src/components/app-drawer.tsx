@@ -1,3 +1,4 @@
+import { useAuthContext } from "@/hooks/use-auth-context";
 import {
   SheetContent,
   SheetDescription,
@@ -7,9 +8,11 @@ import {
 } from "./ui/sheet";
 
 export const DrawerContent = () => {
+  const { user } = useAuthContext();
   return (
     <>
-      <SheetTrigger>
+      <SheetTrigger className="flex gap-2 items-center transition duration-200 hover:text-gray-900 hover:bg-gray-100 rounded-sm py-1 px-2">
+        <span className="text-sm">{user?.email}</span>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="20"
@@ -29,7 +32,7 @@ export const DrawerContent = () => {
       </SheetTrigger>
       <SheetContent>
         <SheetHeader>
-          <SheetTitle>오른쪽 Drawer</SheetTitle>
+          <SheetTitle>Title</SheetTitle>
           <SheetDescription>
             This action cannot be undone. This will permanently delete your
             account and remove your data from our servers.

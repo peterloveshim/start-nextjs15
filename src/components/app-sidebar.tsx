@@ -1,14 +1,15 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import {
   Calendar,
-  Home,
   AppWindow,
   User,
   LogOut,
   House,
   Building,
   ChevronRight,
+  Tally1,
 } from "lucide-react";
 
 import {
@@ -32,35 +33,41 @@ import {
 import { SidebarCustomHeader } from "./app-sidebar-header";
 
 import { paths } from "@/static";
+import { useEffect } from "react";
+import { removeAllSessions } from "@/actions/auth";
+import { useAuthContext } from "@/hooks/use-auth-context";
 
 // Menu items.
 const menu1 = [
   {
     title: "대시보드",
-    url: "/dashboard",
+    url: paths.dashboard,
     icon: AppWindow,
   },
   {
     title: "방 관리",
-    url: "#",
+    url: paths.room.root,
     icon: House,
   },
   {
     title: "사이트관리",
-    url: "#",
+    url: paths.site.root,
     icon: Building,
   },
   {
     title: "계약관리",
+    url: paths.contract.root,
     icon: Calendar,
     items: [
       {
         title: "리스트",
-        url: "#",
+        url: paths.contract.list,
+        icon: Tally1,
       },
       {
         title: "캘린더",
-        url: "#",
+        url: paths.contract.calendar,
+        icon: Tally1,
       },
     ],
   },
@@ -72,15 +79,20 @@ const menu2 = [
     url: paths.account,
     icon: User,
   },
-  {
-    title: "Logout",
-    url: "#",
-    icon: LogOut,
-  },
 ];
 
 export function AppSidebar() {
-  const { open } = useSidebar();
+  const { open, state, isMobile } = useSidebar();
+
+  const { checkUserSession } = useAuthContext();
+
+  const pathname = usePathname();
+
+  const signOut = async () => {
+    await removeAllSessions();
+    checkUserSession?.();
+    // 쿠키 데이터 삭제 => 미들웨어에서 리다이렉트 처리
+  };
 
   return (
     <Sidebar side="left" variant="sidebar" collapsible="icon">
@@ -101,7 +113,14 @@ export function AppSidebar() {
                       defaultOpen
                       className="group/collapsible"
                     >
-                      <SidebarMenuButton asChild>
+                      <SidebarMenuButton
+                        asChild
+                        className={
+                          pathname.startsWith(menu.url)
+                            ? "mb-1 bg-blue-50"
+                            : "mb-1"
+                        }
+                      >
                         <CollapsibleTrigger className="uppercase text-sidebar-foreground/100">
                           <menu.icon />
                           <span className="text-sm">{menu.title}</span>
@@ -114,9 +133,11 @@ export function AppSidebar() {
                             <SidebarMenuButton key={subMenu.title} asChild>
                               <a
                                 href={subMenu.url}
-                                className="rounded-none border-s-2 border-gray-200"
+                                className={
+                                  pathname === subMenu.url ? "bg-blue-50" : ""
+                                }
                               >
-                                <div className="p-[6px]">
+                                <div className="p-[6px] flex items-center w-full">
                                   <span>{subMenu.title}</span>
                                 </div>
                               </a>
@@ -126,7 +147,10 @@ export function AppSidebar() {
                       </CollapsibleContent>
                     </Collapsible>
                   ) : (
-                    <SidebarMenuButton asChild>
+                    <SidebarMenuButton
+                      asChild
+                      className={pathname === menu.url ? "bg-blue-50" : ""}
+                    >
                       <a href={menu.url}>
                         <menu.icon />
                         <span>{menu.title}</span>
@@ -140,12 +164,15 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel className="uppercase">User</SidebarGroupLabel>
+          <SidebarGroupLabel className="uppercase">user</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {menu2.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
+                  <SidebarMenuButton
+                    asChild
+                    className={pathname === item.url ? "bg-blue-50" : ""}
+                  >
                     <a href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
@@ -153,6 +180,15 @@ export function AppSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+
+              <SidebarMenuItem key={"logout"}>
+                <SidebarMenuButton asChild>
+                  <div onClick={signOut}>
+                    <LogOut />
+                    <span>Sign out</span>
+                  </div>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

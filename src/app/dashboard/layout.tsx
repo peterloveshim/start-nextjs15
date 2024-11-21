@@ -1,3 +1,4 @@
+import { UserInfoGuard } from "@/context/auth/user-info-guard";
 import { MainLayout } from "@/layouts/main";
 
 type Props = {
@@ -5,5 +6,9 @@ type Props = {
 };
 
 export default function Layout({ children }: Props) {
-  return <MainLayout>{children}</MainLayout>;
+  return (
+    <UserInfoGuard>
+      <MainLayout>{children}</MainLayout>
+    </UserInfoGuard>
+  );
 }

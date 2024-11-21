@@ -16,14 +16,18 @@ export async function encrypt(payload: SessionPayload) {
     .sign(encodedKey);
 }
 
-export async function decrypt(session: string | undefined = "") {
+export async function decrypt(session: string | null | undefined) {
   try {
+    if (!session) {
+      return null;
+    }
     const { payload } = await jwtVerify(session, encodedKey, {
       algorithms: ["HS256"],
     });
-    return payload;
+    return JSON.parse(JSON.stringify(payload));
   } catch (error) {
-    console.log("Failed to verify session");
+    console.log("사용자 정보 디코딩 에러");
+    return null;
   }
 }
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useContext, useState, useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -36,6 +36,7 @@ import { BasicSpinner, SmallSpinner } from "@/components/spinner";
 import { CustomCountdown } from "@/components/countdown";
 import { useRouter } from "next/navigation";
 import { paths } from "@/static";
+import { AuthContext } from "@/context/auth/auth-context";
 
 export type SignInSchemaType = z.infer<typeof SignInSchema>;
 
@@ -63,6 +64,8 @@ export function LoginForm({
   password: string;
 }) {
   const router = useRouter();
+
+  const auth = useContext(AuthContext);
 
   const [isPending, startTransition] = useTransition();
 
@@ -100,8 +103,6 @@ export function LoginForm({
             password,
             otp: otp.value,
           });
-
-          console.log("123 : ", resObj);
 
           if (resObj.result === "success") {
             router.push(paths.dashboard);

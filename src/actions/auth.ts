@@ -1,6 +1,7 @@
 "use server";
 
-import { encrypt, removeSession, setSession } from "@/lib/session";
+import { cookies } from "next/headers";
+import { decrypt, encrypt, removeSession, setSession } from "@/lib/session";
 import { getMysqlPassword } from "@/lib/utils";
 import { ACCESS_TOKEN, USER_INFO } from "@/static";
 import { IErrorResponse } from "@/types";
@@ -109,8 +110,7 @@ export const signInWithOtp = async ({
       name: payload.admin.name,
     });
 
-    await removeSession(USER_INFO);
-    await removeSession(ACCESS_TOKEN);
+    await removeAllSessions();
 
     await setSession(USER_INFO, encryptedData, payload.exp * 1000);
     await setSession(ACCESS_TOKEN, accessToken, payload.exp * 1000);
@@ -123,4 +123,38 @@ export const signInWithOtp = async ({
       error: { message: "로그인 에러" },
     };
   }
+};
+
+type UserSessionData = {
+  idx: number;
+  email: string;
+  name: string;
+};
+
+export const getSessionDatas = async (): Promise<{
+  accessToken: string | null;
+  userInfo: UserSessionData | null;
+}> => {
+  try {
+    const cookieStore = await cookies();
+    const accessToken = cookieStore.get(ACCESS_TOKEN);
+    const userInfo = cookieStore.get(USER_INFO);
+
+    if (accessToken && userInfo) {
+      const decryptedUserInfo: UserSessionData = await decrypt(userInfo.value);
+      return {
+        accessToken: accessToken.value,
+        userInfo: decryptedUserInfo,
+      };
+    }
+
+    return { accessToken: null, userInfo: null };
+  } catch (err) {
+    return { accessToken: null, userInfo: null };
+  }
+};
+
+export const removeAllSessions = async () => {
+  await removeSession(USER_INFO);
+  await removeSession(ACCESS_TOKEN);
 };

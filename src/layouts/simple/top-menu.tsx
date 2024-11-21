@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { forwardRef } from "react";
 import Link from "next/link";
 
 import { cn } from "@/lib/utils";
@@ -13,9 +13,9 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { usePathname } from "next/navigation";
-import { paths } from "@/static";
-import { Logo, LogoSmall } from "@/components/icon";
+import { LogoSmall } from "@/components/icon";
+
+import { SimpleDropdownMenu } from "./drop-down";
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -55,16 +55,16 @@ const components: { title: string; href: string; description: string }[] = [
   },
 ];
 
-export function TopMenu() {
-  const pathname = usePathname();
-
+export function TopMenu({ isLogin }: { isLogin: boolean }) {
   return (
     <>
       <div className="min-w-40">
-        <LogoSmall />
+        <a href="/">
+          <LogoSmall />
+        </a>
       </div>
-      <NavigationMenu className="hidden md:flex ">
-        <NavigationMenuList>
+      <NavigationMenu>
+        <NavigationMenuList className="hidden md:flex ">
           <NavigationMenuItem>
             <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>
             <NavigationMenuContent>
@@ -120,22 +120,16 @@ export function TopMenu() {
               </NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
-          {pathname !== paths.auth.signIn && (
-            <NavigationMenuItem>
-              <Link href={paths.auth.signIn} legacyBehavior passHref>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                  Sign in
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
-          )}
+        </NavigationMenuList>
+        <NavigationMenuList>
+          <SimpleDropdownMenu isLogin={isLogin} />
         </NavigationMenuList>
       </NavigationMenu>
     </>
   );
 }
 
-const ListItem = React.forwardRef<
+const ListItem = forwardRef<
   React.ElementRef<"a">,
   React.ComponentPropsWithoutRef<"a">
 >(({ className, title, children, ...props }, ref) => {
