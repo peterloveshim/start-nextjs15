@@ -5,7 +5,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "./ui/sheet";
+} from "@/components/ui/sheet";
 
 export const DrawerContent = () => {
   const { user } = useAuthContext();

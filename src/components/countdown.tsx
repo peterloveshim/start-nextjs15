@@ -5,7 +5,7 @@ export const CustomCountdown = ({
   onClick,
 }: {
   expUnixTime: number;
-  onClick: any;
+  onClick: () => void;
 }) => {
   const rendererLeftTime = ({
     hours,

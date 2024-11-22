@@ -7,6 +7,7 @@ export const paths = {
   dashboard: "/dashboard",
   room: {
     root: "/room",
+    new: "/room/new",
   },
   site: {
     root: "/site",

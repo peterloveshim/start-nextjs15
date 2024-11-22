@@ -1,8 +1,7 @@
 "use client";
 
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 
-import { AuthContext } from "@/context/auth/auth-context";
 import { removeAllSessions } from "@/actions/auth";
 import { useRouter } from "next/navigation";
 import { paths } from "@/static";

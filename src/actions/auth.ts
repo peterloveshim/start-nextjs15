@@ -149,7 +149,7 @@ export const getSessionDatas = async (): Promise<{
     }
 
     return { accessToken: null, userInfo: null };
-  } catch (err) {
+  } catch (error) {
     return { accessToken: null, userInfo: null };
   }
 };

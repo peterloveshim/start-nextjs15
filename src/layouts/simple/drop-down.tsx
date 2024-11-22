@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -15,23 +17,28 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { User } from "lucide-react";
+import { LogOut, User, UserRound } from "lucide-react";
 import { paths } from "@/static";
 import { removeAllSessions } from "@/actions/auth";
-import { useContext } from "react";
-import { AuthContext } from "@/context/auth/auth-context";
 import { usePathname, useRouter } from "next/navigation";
-import { Separator } from "@radix-ui/react-separator";
+import { useAuthContext } from "@/hooks/use-auth-context";
+import { SessionPayload } from "@/types";
+import { Separator } from "@/components/ui/separator";
 
-export function SimpleDropdownMenu({ isLogin }: { isLogin: boolean }) {
+export const SimpleDropdownMenu = ({
+  userInfo,
+}: {
+  userInfo: SessionPayload | null;
+}) => {
   const router = useRouter();
 
   const pathname = usePathname();
 
-  const auth = useContext(AuthContext);
+  const { checkUserSession } = useAuthContext();
 
   const handleLogout = async () => {
     await removeAllSessions();
+    checkUserSession?.();
 
     router.refresh();
   };
@@ -40,24 +47,24 @@ export function SimpleDropdownMenu({ isLogin }: { isLogin: boolean }) {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline">
-          <User />
-          {auth?.user?.email && (
-            <>
-              <Separator />
-              <span>{auth.user.email}</span>
-            </>
+          <UserRound />
+          {userInfo?.email && (
+            <div className="flex items-center space-x-3">
+              <Separator orientation="vertical" className="h-5" />
+              <span className="font-normal">{userInfo.email}</span>
+            </div>
           )}
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent className="w-56">
+      <DropdownMenuContent className="w-48">
         <DropdownMenuLabel>
-          {isLogin ? "My Account" : "Guest"}
+          {userInfo ? "My Account" : "Guest"}
         </DropdownMenuLabel>
 
         <DropdownMenuSeparator />
 
-        {isLogin && (
+        {userInfo && (
           <>
             <DropdownMenuGroup>
               <Link href={paths.dashboard}>
@@ -112,7 +119,7 @@ export function SimpleDropdownMenu({ isLogin }: { isLogin: boolean }) {
           <DropdownMenuSeparator />
         </div>
 
-        {isLogin ? (
+        {userInfo ? (
           <DropdownMenuItem onClick={handleLogout}>Sign out</DropdownMenuItem>
         ) : (
           <Link href={paths.auth.signIn}>
@@ -124,4 +131,4 @@ export function SimpleDropdownMenu({ isLogin }: { isLogin: boolean }) {
       </DropdownMenuContent>
     </DropdownMenu>
   );
-}
+};

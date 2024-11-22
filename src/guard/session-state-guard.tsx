@@ -8,25 +8,25 @@ type Props = {
   children: React.ReactNode;
 };
 
-/* 사용자 정보 */
-export function UserInfoGuard({ children }: Props) {
-  const { authenticated, loading, checkUserSession } = useAuthContext();
+// 로그인 상태와 상관없이 user 정보 set
+// user 정보 상태에 따라 UI 깜빡거림 방지
+// 대신에 SplashScreen 처리
+export function SessionStateGuard({ children }: Props) {
+  const { loading, checkUserSession } = useAuthContext();
 
   const [isChecking, setIsChecking] = useState<boolean>(true);
 
   const checkPermissions = async () => {
-    checkUserSession?.();
-    console.log("authenticated : ", authenticated);
-    console.log("loading : ", loading);
+    await checkUserSession?.();
 
-    if (!loading && authenticated) {
+    if (!loading) {
       setIsChecking(false);
     }
   };
 
   useEffect(() => {
     checkPermissions();
-  }, [authenticated, loading]);
+  }, [loading]);
 
   if (isChecking) {
     return <SplashScreen />;

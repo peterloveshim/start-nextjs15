@@ -17,8 +17,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "./ui/sidebar";
+} from "@/components/ui/sidebar";
 import { useBoolean } from "@/hooks/use-boolean";
+import { LogoSquare } from "@/components/icon";
 
 export const SidebarCustomHeader = () => {
   const { state, isMobile } = useSidebar();
@@ -35,6 +36,7 @@ export const SidebarCustomHeader = () => {
           <DropdownMenu onOpenChange={dropdown.onToggle}>
             <DropdownMenuTrigger asChild>
               <SidebarMenuButton className="whitespace-nowrap">
+                <LogoSquare />
                 Select Workspace
                 <ChevronDown
                   className={`ml-auto transition duration-150 ease-in-out ${

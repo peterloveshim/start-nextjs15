@@ -1,4 +1,7 @@
 import { MainLayout } from "@/layouts/main";
+import { CONFIG } from "@/static";
+
+export const metadata = { title: `Contact | ${CONFIG.site.name}` };
 
 type Props = {
   children: React.ReactNode;

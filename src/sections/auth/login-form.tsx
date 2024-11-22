@@ -37,6 +37,7 @@ import { CustomCountdown } from "@/components/countdown";
 import { useRouter } from "next/navigation";
 import { paths } from "@/static";
 import { AuthContext } from "@/context/auth/auth-context";
+import { useAuthContext } from "@/hooks/use-auth-context";
 
 export type SignInSchemaType = z.infer<typeof SignInSchema>;
 
@@ -65,7 +66,7 @@ export function LoginForm({
 }) {
   const router = useRouter();
 
-  const auth = useContext(AuthContext);
+  const { checkUserSession } = useAuthContext();
 
   const [isPending, startTransition] = useTransition();
 
@@ -105,6 +106,7 @@ export function LoginForm({
           });
 
           if (resObj.result === "success") {
+            await checkUserSession?.();
             router.push(paths.dashboard);
           } else if (resObj.result === "error") {
             customToast({
@@ -149,7 +151,7 @@ export function LoginForm({
           <CardHeader className="text-center gap-1">
             <CardTitle>Sign in</CardTitle>
             <CardDescription className="text-sm">
-              Don't have an account?{" "}
+              {"Don't have an account?"}
               <a href="#" className="text-gray-800 hover:underline">
                 Sign Up
               </a>

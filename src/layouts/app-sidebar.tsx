@@ -33,39 +33,38 @@ import {
 import { SidebarCustomHeader } from "./app-sidebar-header";
 
 import { paths } from "@/static";
-import { useEffect } from "react";
-import { removeAllSessions } from "@/actions/auth";
-import { useAuthContext } from "@/hooks/use-auth-context";
+
+import "./style.css";
 
 // Menu items.
 const menu1 = [
   {
-    title: "대시보드",
+    title: "Dashboard",
     url: paths.dashboard,
     icon: AppWindow,
   },
   {
-    title: "방 관리",
+    title: "Room",
     url: paths.room.root,
     icon: House,
   },
   {
-    title: "사이트관리",
+    title: "Site",
     url: paths.site.root,
     icon: Building,
   },
   {
-    title: "계약관리",
+    title: "Contract",
     url: paths.contract.root,
     icon: Calendar,
     items: [
       {
-        title: "리스트",
+        title: "List",
         url: paths.contract.list,
         icon: Tally1,
       },
       {
-        title: "캘린더",
+        title: "Calendar",
         url: paths.contract.calendar,
         icon: Tally1,
       },
@@ -74,25 +73,19 @@ const menu1 = [
 ];
 
 const menu2 = [
+  /*
   {
     title: "Account",
     url: paths.account,
     icon: User,
   },
+  */
 ];
 
 export function AppSidebar() {
-  const { open, state, isMobile } = useSidebar();
-
-  const { checkUserSession } = useAuthContext();
+  const { open } = useSidebar();
 
   const pathname = usePathname();
-
-  const signOut = async () => {
-    await removeAllSessions();
-    checkUserSession?.();
-    // 쿠키 데이터 삭제 => 미들웨어에서 리다이렉트 처리
-  };
 
   return (
     <Sidebar side="left" variant="sidebar" collapsible="icon">
@@ -117,11 +110,11 @@ export function AppSidebar() {
                         asChild
                         className={
                           pathname.startsWith(menu.url)
-                            ? "mb-1 bg-blue-50"
+                            ? "mb-1 nav-active"
                             : "mb-1"
                         }
                       >
-                        <CollapsibleTrigger className="uppercase text-sidebar-foreground/100">
+                        <CollapsibleTrigger className="text-sidebar-foreground/100">
                           <menu.icon />
                           <span className="text-sm">{menu.title}</span>
                           <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
@@ -134,7 +127,7 @@ export function AppSidebar() {
                               <a
                                 href={subMenu.url}
                                 className={
-                                  pathname === subMenu.url ? "bg-blue-50" : ""
+                                  pathname === subMenu.url ? "nav-active" : ""
                                 }
                               >
                                 <div className="p-[6px] flex items-center w-full">
@@ -149,7 +142,7 @@ export function AppSidebar() {
                   ) : (
                     <SidebarMenuButton
                       asChild
-                      className={pathname === menu.url ? "bg-blue-50" : ""}
+                      className={pathname === menu.url ? "nav-active" : ""}
                     >
                       <a href={menu.url}>
                         <menu.icon />
@@ -159,36 +152,6 @@ export function AppSidebar() {
                   )}
                 </SidebarMenuItem>
               ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-
-        <SidebarGroup>
-          <SidebarGroupLabel className="uppercase">user</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {menu2.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    className={pathname === item.url ? "bg-blue-50" : ""}
-                  >
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-
-              <SidebarMenuItem key={"logout"}>
-                <SidebarMenuButton asChild>
-                  <div onClick={signOut}>
-                    <LogOut />
-                    <span>Sign out</span>
-                  </div>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

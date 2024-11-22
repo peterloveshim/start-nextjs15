@@ -16,6 +16,8 @@ import {
 import { LogoSmall } from "@/components/icon";
 
 import { SimpleDropdownMenu } from "./drop-down";
+import { Separator } from "@radix-ui/react-separator";
+import { SessionPayload } from "@/types";
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -55,13 +57,13 @@ const components: { title: string; href: string; description: string }[] = [
   },
 ];
 
-export function TopMenu({ isLogin }: { isLogin: boolean }) {
+export function TopMenu({ userInfo }: { userInfo: SessionPayload | null }) {
   return (
     <>
       <div className="min-w-40">
-        <a href="/">
+        <Link href="/">
           <LogoSmall />
-        </a>
+        </Link>
       </div>
       <NavigationMenu>
         <NavigationMenuList className="hidden md:flex ">
@@ -71,7 +73,7 @@ export function TopMenu({ isLogin }: { isLogin: boolean }) {
               <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[400px] lg:grid-cols-[.75fr_1fr]">
                 <li className="row-span-3">
                   <NavigationMenuLink asChild>
-                    <a
+                    <Link
                       className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
                       href="/"
                     >
@@ -82,7 +84,7 @@ export function TopMenu({ isLogin }: { isLogin: boolean }) {
                         Beautifully designed components built with Radix UI and
                         Tailwind CSS.
                       </p>
-                    </a>
+                    </Link>
                   </NavigationMenuLink>
                 </li>
                 <ListItem href="/docs" title="Introduction">
@@ -122,7 +124,8 @@ export function TopMenu({ isLogin }: { isLogin: boolean }) {
           </NavigationMenuItem>
         </NavigationMenuList>
         <NavigationMenuList>
-          <SimpleDropdownMenu isLogin={isLogin} />
+          <Separator />
+          <SimpleDropdownMenu userInfo={userInfo} />
         </NavigationMenuList>
       </NavigationMenu>
     </>

@@ -2,8 +2,74 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "TheJamsil";
+  src: url("./fonts/The_Jamsil_TTF_2024/The\ Jamsil\ 1\ Thin.ttf")
+      format("truetype"),
+    url("./fonts/The_Jamsil_TTF_2024/The\ Jamsil\ 2\ Light.ttf")
+      format("truetype"),
+    url("./fonts/The_Jamsil_TTF_2024/The\ Jamsil\ 3\ Regular.ttf")
+      format("truetype"),
+    url("./fonts/The_Jamsil_TTF_2024/The\ Jamsil\ 4\ Medium.ttf")
+      format("truetype"),
+    url("./fonts/The_Jamsil_TTF_2024/The\ Jamsil\ 5\ Bold.ttf")
+      format("truetype"),
+    url("./fonts/The_Jamsil_TTF_2024/The\ Jamsil\ 6\ ExtraBold.ttf")
+      format("truetype");
+  font-weight: "100, 200, 300, 500, 700, 900";
+}
+
+@font-face {
+  font-family: "TheJamsil";
+  font-style: normal;
+  font-weight: 100;
+  src: url("./fonts/The_Jamsil_TTF_2024/The\ Jamsil\ 1\ Thin.ttf")
+    format("truetype");
+}
+
+@font-face {
+  font-family: "TheJamsil";
+  font-style: normal;
+  font-weight: 300;
+  src: url("./fonts/The_Jamsil_TTF_2024/The\ Jamsil\ 2\ Light.ttf")
+    format("truetype");
+}
+
+@font-face {
+  font-family: "TheJamsil";
+  font-style: normal;
+  font-weight: 400;
+  src: url("./fonts/The_Jamsil_TTF_2024/The\ Jamsil\ 3\ Regular.ttf")
+    format("truetype");
+}
+
+@font-face {
+  font-family: "TheJamsil";
+  font-style: normal;
+  font-weight: 500;
+  src: url("./fonts/The_Jamsil_TTF_2024/The\ Jamsil\ 4\ Medium.ttf")
+    format("truetype");
+}
+
+@font-face {
+  font-family: "TheJamsil";
+  font-style: normal;
+  font-weight: 700;
+  src: url("./fonts/The_Jamsil_TTF_2024/The\ Jamsil\ 5\ Bold.ttf")
+    format("truetype");
+}
+
+@font-face {
+  font-family: "TheJamsil";
+  font-style: normal;
+  font-weight: 800;
+  src: url("./fonts/The_Jamsil_TTF_2024/The\ Jamsil\ 6\ ExtraBold.ttf")
+    format("truetype");
+}
+
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: TheJamsil, Arial, Helvetica, sans-serif;
+  letter-spacing: 0.02em;
 }
 
 @layer utilities {
